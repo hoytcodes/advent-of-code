@@ -1,0 +1,16 @@
+{
+    "name": "hoyt/advent-of-code",
+    "description": "Project files for Advent of Code 2020",
+    "authors": [
+        {
+            "name": "Hoyt Reid",
+            "email": "hoytsreid@gmail.com"
+        }
+    ],
+    "scripts": {
+      "test": "phpunit --colors=always"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "9"
+    }
+}
