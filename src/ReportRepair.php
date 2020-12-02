@@ -16,14 +16,23 @@ class ReportRepair {
     return $parsedInput;
   }
 
-  public function findReportSum($input) {
+  public function findReportSum(array $input, bool $extraAddend = false) {
     $addends = [];
 
     foreach ($input as $firstNumber) {
       foreach ($input as $secondNumber) {
-        if (($firstNumber + $secondNumber) == self::REPORT_SUM) {
-          array_push($addends, $firstNumber, $secondNumber);
-          break 2;
+        if ($extraAddend) {
+          foreach ($input as $thirdNumber) {
+            if (($firstNumber + $secondNumber + $thirdNumber) == self::REPORT_SUM) {
+              array_push($addends, $firstNumber, $secondNumber, $thirdNumber);
+              break 3;
+            }
+          }
+        } else {
+          if (($firstNumber + $secondNumber) == self::REPORT_SUM) {
+            array_push($addends, $firstNumber, $secondNumber);
+            break 2;
+          }
         }
       }
     }
@@ -32,16 +41,19 @@ class ReportRepair {
   }
 
   public function multiplyEntries($input) {
-    extract($input, EXTR_PREFIX_INVALID, 'number');
-
-    return $number_0 * $number_1;
+    return array_product($input);
   }
 
   public function generateAnswer() {
     $input = $this->readFile();
-    $addends = $this->findReportSum($input);
-    $answer = $this->multiplyEntries($addends);
 
-    print "Day 1 Part 1 Answer: " . $answer;
+    $partOneAddends = $this->findReportSum($input);
+    $partOneAnswer = $this->multiplyEntries($partOneAddends);
+
+    $partTwoAddends = $this->findReportSum($input, true);
+    $partTwoAnswer = $this->multiplyEntries($partTwoAddends);
+
+    print "Day 1 Part 1 Answer: " . $partOneAnswer . PHP_EOL;
+    print "Day 1 Part 2 Answer: " . $partTwoAnswer . PHP_EOL;
   }
 }

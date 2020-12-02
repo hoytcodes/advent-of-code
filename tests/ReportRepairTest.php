@@ -11,7 +11,7 @@ class ReportRepairTest extends TestCase {
     $this->reportRepair = new ReportRepair();
   }
 
-  public function testFindReportSum() {
+  public function testFindReportSumForTwoNumbers() {
     $testArray = [1721, 979, 366, 299, 675, 1456];
     $output = $this->reportRepair->findReportSum($testArray);
 
@@ -19,10 +19,25 @@ class ReportRepairTest extends TestCase {
     $this->assertEqualsCanonicalizing([1721, 299], $output);
   }
 
-  public function testMultiplyEntries() {
+  public function testMultiplyEntriesForTwoNumbers() {
     $testArray = [1721, 299];
     $output = $this->reportRepair->multiplyEntries($testArray);
 
     $this->assertEquals(514579, $output);
+  }
+
+  public function testFindReportSumForThreeNumbers() {
+    $testArray = [1721, 979, 366, 299, 675, 1456];
+    $output = $this->reportRepair->findReportSum($testArray, true);
+
+    $this->assertCount(3, $output);
+    $this->assertEqualsCanonicalizing([979, 366, 675], $output);
+  }
+
+  public function testMultiplyEntriesForThreeNumbers() {
+    $testArray = [979, 366, 675];
+    $output = $this->reportRepair->multiplyEntries($testArray);
+
+    $this->assertEquals(241861950, $output);
   }
 }
