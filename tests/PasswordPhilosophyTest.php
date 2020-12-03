@@ -21,12 +21,34 @@ class PasswordPhilosophyTest extends TestCase {
     $this->assertEquals('abcde', $parsedPassword->getPassword());
   }
 
-  public function testPasswordIsValid() {
+  public function testLegacyPasswordIsValid() {
     $validPassword = new Password('1-3 a: abcde');
     $invalidPassword = new Password('1-3 b: cdefg');
 
-    $this->assertTrue($validPassword->isValid());
-    $this->assertFalse($invalidPassword->isValid());
+    $this->assertTrue($validPassword->isValidLegacyPassword());
+    $this->assertFalse($invalidPassword->isValidLegacyPassword());
+  }
+
+  public function testCurrentPasswordIsValid() {
+    $validPassword = new Password('1-3 a: abcde');
+    $invalidPasswordOne = new Password('1-3 b: cdefg');
+    $invalidPasswordTwo = new Password('2-9 c: ccccccccc');
+
+    $this->assertTrue($validPassword->isValidPassword());
+    $this->assertFalse($invalidPasswordOne->isValidPassword());
+    $this->assertFalse($invalidPasswordTwo->isValidPassword());
+  }
+
+  public function testCountValidLegacyPasswords() {
+    $input = [
+      new Password('1-3 a: abcde'),
+      new Password('1-3 b: cdefg'),
+      new Password('2-9 c: ccccccccc')
+    ];
+
+    $validPasswordCount = $this->passwordPhilosophy->countValidLegacyPasswords($input);
+
+    $this->assertEquals(2, $validPasswordCount);
   }
 
   public function testCountValidPasswords() {
@@ -38,6 +60,6 @@ class PasswordPhilosophyTest extends TestCase {
 
     $validPasswordCount = $this->passwordPhilosophy->countValidPasswords($input);
 
-    $this->assertEquals(2, $validPasswordCount);
+    $this->assertEquals(1, $validPasswordCount);
   }
 }

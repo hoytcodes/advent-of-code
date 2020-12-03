@@ -15,11 +15,23 @@ class PasswordPhilosophy {
     return $parsedInput;
   }
 
+  public function countValidLegacyPasswords(array $passwordInput) {
+    $validPasswordCount = 0;
+
+    foreach ($passwordInput as $password) {
+      if($password->isValidLegacyPassword()) {
+        $validPasswordCount += 1;
+      }
+    }
+
+    return $validPasswordCount;
+  }
+
   public function countValidPasswords(array $passwordInput) {
     $validPasswordCount = 0;
 
     foreach ($passwordInput as $password) {
-      if($password->isValid()) {
+      if($password->isValidPassword()) {
         $validPasswordCount += 1;
       }
     }
@@ -30,9 +42,11 @@ class PasswordPhilosophy {
   public function generateAnswer() {
     $input = $this->readFile();
 
+    $validLegacyPasswordCount = $this->countValidLegacyPasswords($input);
     $validPasswordCount = $this->countValidPasswords($input);
 
-    print "Day 2 Part 1 Answer: " . $validPasswordCount . PHP_EOL;
+    print "Day 2 Part 1 Answer: " . $validLegacyPasswordCount . PHP_EOL;
+    print "Day 2 Part 2 Answer: " . $validPasswordCount . PHP_EOL;
   }
 }
 
@@ -67,9 +81,20 @@ class Password {
     return $this->password;
   }
 
-  public function isValid(): bool {
+  public function isValidLegacyPassword(): bool {
     $keyLetterCount = substr_count($this->password, $this->keyLetter);
 
     return $keyLetterCount >= $this->minValue && $keyLetterCount <= $this->maxValue;
+  }
+
+  public function isValidPassword(): bool {
+    $firstPosition = substr($this->password, $this->minValue - 1, 1);
+    $secondPosition = substr($this->password, $this->maxValue - 1, 1);
+
+    if ($firstPosition == $this->keyLetter && $secondPosition == $this->keyLetter) {
+      return false;
+    }
+
+    return $firstPosition == $this->keyLetter || $secondPosition == $this->keyLetter;
   }
 }
