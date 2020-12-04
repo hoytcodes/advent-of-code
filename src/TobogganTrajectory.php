@@ -11,7 +11,7 @@ class TobogganTrajectory {
     return $input;
   }
 
-  public function treeCollisionCount(array $input) {
+  public function treeCollisionCount(array $input, int $xPath, int $yPath) {
     $mapWidth = strlen($input[0]) - 1;
     $mapHeight = count($input) - 1;
 
@@ -20,14 +20,14 @@ class TobogganTrajectory {
 
     $collisionCount = 0;
 
-    for ($i=0; $i < $mapHeight; $i++) {
-      if($xCoordinate + 3 > $mapWidth) {
-        $xCoordinate = ($xCoordinate + 3) - ($mapWidth) - 1;
+    while ($yCoordinate < $mapHeight) {
+      if($xCoordinate + $xPath > $mapWidth) {
+        $xCoordinate = ($xCoordinate + $xPath) - ($mapWidth) - 1;
       } else {
-        $xCoordinate += 3;
+        $xCoordinate += $xPath;
       }
 
-      $yCoordinate += 1;
+      $yCoordinate += $yPath;
 
       $coordinate = substr($input[$yCoordinate], $xCoordinate, 1);
 
@@ -39,11 +39,30 @@ class TobogganTrajectory {
     return $collisionCount;
   }
 
+  public function multipleCollisionCount(array $input, array $trajectories) {
+    $treeCollisions = [];
+
+    foreach ($trajectories as $trajectory) {
+      $treeCollisions[] = $this->treeCollisionCount($input, $trajectory[0], $trajectory[1]);
+    }
+
+    return array_product($treeCollisions);
+  }
+
   public function generateAnswer() {
     $input = $this->readFile();
+    $trajectories = [
+      [1, 1],
+      [3, 1],
+      [5, 1],
+      [7, 1],
+      [1, 2],
+    ];
 
-    $treeCollisionCount = $this->treeCollisionCount($input);
+    $treeCollisionCount = $this->treeCollisionCount($input, 3, 1);
+    $multipleCollision = $this->multipleCollisionCount($input, $trajectories);
 
     print "Day 3 Part 1 Answer: " . $treeCollisionCount . PHP_EOL;
+    print "Day 3 Part 2 Answer: " . $multipleCollision . PHP_EOL;
   }
 }
