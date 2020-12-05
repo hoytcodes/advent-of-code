@@ -3,6 +3,7 @@
 require_once 'src\ReportRepair.php';
 require_once 'src\PasswordPhilosophy.php';
 require_once 'src\TobogganTrajectory.php';
+require_once 'src\PassportProcessing.php';
 
 array_shift($argv);
 
@@ -18,6 +19,10 @@ foreach($argv as $arg) {
         break;
     case 'day-03':
         $class = new TobogganTrajectory();
+        $class->generateAnswer();
+        break;
+    case 'day-04':
+        $class = new PassportProcessing();
         $class->generateAnswer();
         break;
     default:
