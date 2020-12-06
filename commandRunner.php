@@ -4,6 +4,7 @@ require_once 'src\ReportRepair.php';
 require_once 'src\PasswordPhilosophy.php';
 require_once 'src\TobogganTrajectory.php';
 require_once 'src\PassportProcessing.php';
+require_once 'src\BinaryBoarding.php';
 
 array_shift($argv);
 
@@ -23,6 +24,10 @@ foreach($argv as $arg) {
         break;
     case 'day-04':
         $class = new PassportProcessing();
+        $class->generateAnswer();
+        break;
+    case 'day-05':
+        $class = new BinaryBoarding();
         $class->generateAnswer();
         break;
     default:
