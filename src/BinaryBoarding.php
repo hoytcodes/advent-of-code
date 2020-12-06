@@ -49,6 +49,23 @@ class BinaryBoarding {
     return ($rowNumber * 8) + $seatNumber;
   }
 
+  public function findMissingSeat(array $seatIds) {
+    sort($seatIds, SORT_NUMERIC);
+    $missingSeat = 0;
+
+    foreach ($seatIds as $seat) {
+      for ($i=0; $i < count($seatIds); $i++) {
+        $idDifference = $seatIds[$i] - $seat;
+        if($idDifference == 2 && !in_array($seat + 1, $seatIds)) {
+          $missingSeat = $seat + 1;
+          break 2;
+        }
+      }
+    }
+
+    return $missingSeat;
+  }
+
   public function generateAnswer() {
     $input = $this->readFile();
     $seatIds = [];
@@ -58,5 +75,6 @@ class BinaryBoarding {
     }
 
     print "Day 5 Part 1 Answer: " . max($seatIds) . PHP_EOL;
+    print "Day 5 Part 2 Answer: " . $this->findMissingSeat($seatIds) . PHP_EOL;
   }
 }
